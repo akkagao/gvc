@@ -1,157 +1,172 @@
-## [中文](https://github.com/moqsien/gvc/blob/main/docs/Readme_CN.md)
-<!-- ![logo](https://github.com/moqsien/gvc/blob/main/docs/logo.png) -->
+## [En](https://github.com/moqsien/gvc)
+<!-- ![logo](https://github.com/moqsien/gvc/blob/main/docs/logo.png)-->
 <img src="https://github.com/moqsien/gvc/blob/main/docs/logo.png" width="30%">
 
-- [中文](#中文)
-- [What's GVC?](#whats-gvc)
-- [What's supported?](#whats-supported)
-- [Download \& Install](#download--install)
-- [Main features](#main-features)
-  - [Subcommand: gpt](#subcommand-gpt)
-  - [Subcommand: go](#subcommand-go)
-  - [Subcommand: proto](#subcommand-proto)
-  - [Subcommand: python](#subcommand-python)
-  - [Subcommand: java](#subcommand-java)
-  - [Subcommand: cpp](#subcommand-cpp)
-  - [Subcommand: vlang](#subcommand-vlang)
-  - [Subcommand: vscode](#subcommand-vscode)
-  - [Subcommand: hosts](#subcommand-hosts)
-  - [Subcommand: github](#subcommand-github)
-  - [Subcommand: git-XXX](#subcommand-git-xxx)
-  - [Subcommand: browser](#subcommand-browser)
-  - [Subcommand: asciinema](#subcommand-asciinema)
-  - [Subcommand: cloc](#subcommand-cloc)
-  - [Subcommand: config](#subcommand-config)
-  - [Subcommand: neobox-shell](#subcommand-neobox-shell)
-    - [Supported command in neobox-shell](#supported-command-in-neobox-shell)
-- [special statement](#special-statement)
+- [En](#en)
+- [gvc是什么？](#gvc是什么)
+- [gvc支持哪些语言或应用？](#gvc支持哪些语言或应用)
+- [下载和安装](#下载和安装)
+- [功能概览](#功能概览)
+  - [gpt子命令](#gpt子命令)
+  - [go子命令](#go子命令)
+  - [proto子命令](#proto子命令)
+  - [python子命令](#python子命令)
+  - [java子命令](#java子命令)
+  - [cpp子命令](#cpp子命令)
+  - [vlang子命令](#vlang子命令)
+  - [vscode子命令](#vscode子命令)
+  - [hosts子命令](#hosts子命令)
+  - [github子命令](#github子命令)
+  - [git-XXX 子命令](#git-xxx-子命令)
+  - [browser子命令](#browser子命令)
+  - [asciinema子命令](#asciinema子命令)
+  - [cloc子命令](#cloc子命令)
+  - [config子命令](#config子命令)
+  - [neobox-shell子命令](#neobox-shell子命令)
+    - [neobox-shell内部命令](#neobox-shell内部命令)
+- [特别申明](#特别申明)
 - [Demo](#demo)
-- [thanks to](#thanks-to)
-- [buy me a coffee](#buy-me-a-coffee)
+- [感谢](#感谢)
+- [送我一杯咖啡~~~](#送我一杯咖啡)
 
 ---------
-
-gvc QQ group：
+gvc交流QQ群：
 
 <img src="https://github.com/moqsien/neobox/blob/main/docs/gvc_qq_group.jpg" width="30%">
 
-## What's GVC?
-At the very beginning, GVC is just the abbreviation for **Go-Version-Controller**, which means, it provides auto-installation, environment variables handling, as well as multi-versions management only for Go compilers.
+---------
+## gvc是什么？
+最开始，gvc是go version controller的缩写。当时只是想做一个好用一点，界面相对美观一点的go多版本管理工具。
 
-As we know, we already have [gvm](https://github.com/andrewkroh/gvm) or [g](https://github.com/voidint/g) with the similar features implemented. So, why do we need a new one?
+原因在于[gvm](https://github.com/andrewkroh/gvm)安装都需要自行设置环境变量，而且长时间不更新(不过，我也没使用过它)。
+[g](https://github.com/voidint/g)可以正常使用，也能满足需求，同时也支持Mac/Win/Linux，是个不错的选择。
+但是g显示版本是一行一条，当版本很多时，上下翻找体验确实不好。
+再者，g只负责安装某个版本，不负责配置环境变量。也就是说，如果你的电脑上之前没有安装过go编译器，你还得自行配置GOPROXY, GOPATH,GOBIN等等。
+另外，g默认从[go.dev](https://go.dev)下载，对于中国大陆的用户不太友好，想要使用[golang.google.cn](https://golang.google.cn/)加速还得自行设置环境变量。
+综合考虑，所以自行写了gvc。旨在一键搞定所有，方便好用。
 
-The reason to create GVC is for more convenience and a better UI(maybe TUI more pricisely).
+值得提一嘴的是，在Windows下搞定自动配置环境变量，是件比较麻烦的事情。因为Windows通过setx设置环境变量之后，首先容易被接下来的setx命令覆盖，其次是如果不重新打开一个Powershell，
+是无法读取到刚刚通过setx设置的环境变量的。所以，**Windows用户在使用过程中，如果通过gvc安装了软件，记得重新打开Powershell**。
 
-However, this never becomes the end of the story. After the version-management for Go has been implemented, an idea for managing other languages flashes across my mind. Therefore, GVC starts to support version-control and auto-installation also for **Java/Python/NodeJS/Flutter/Julia/Protoc/Rust/Cpp/Vlang/Typst**.
+后来，觉得其他语言也可以有类似的功能。因为作者平时使用的语言主要就有go/python/typescript等等，还会看看rust，vlang，c/cpp之类的。所以，为什么gvc不可以支持一下这些语言呢？
+说干就干，一顿操作下来，gvc最终支持的语言有go/java/python/nodejs/flutter(dart)/julia/rust/cpp/vlang/typst。
 
-At this point, GVC becomes **General-Version-Controller**.
+所以，gvc可以说是General version controller的缩写。
 
-And the story still continues.
+不过，光有语言的编译器/解释器，总觉得还缺点什么？
+是的，缺IDE/Editor。所以，gvc支持了一键安装VSCode和Neovim。二者可以通过插件进行搭配，轻松实现多语言开发。
 
-Auto-installation for Visual Studio Code(**VSCode**) and **NeoVim** is adopted.The **WebDAV** support is also introduced for saving config files from VSCode/NeoVim to user's netdisk(eg. jianguoyun.com). So, you can rebuild your Development Environment using these files on any machine.
+但是，很多小伙伴觉得VSCode配置麻烦，使用起来不如JetBrains系列方便。没问题，安排！
+gvc增加了WebDAV协议的网盘同步功能，它能把你的本地配置一键同步到WebDAV网盘(例如坚果云)中。这样的话，你只需要配置一次就好了。
+在其他任何地方，你都可以使用WebDAV中的配置信息，通过gvc恢复你熟悉的VSCode配置。这些包括你常用的VSCode插件，你熟悉的Keybindings配置，你的settings.json等。
 
-Besides, GVC also supports [asciinema](https://asciinema.org/) terminal recording, browser data management, counting lines of code, etc.
+至此，gvc已经帮你解决了各种编程语言以及IDE的麻烦。然而gvc的功能还远未介绍完毕。
 
-Finally, GVC becomes something just like a **Scaffolding Tool for local development environments management**.
+考虑到在家学习时，经常需要上google和github。所以gvc有了免费的梯子。通过作者之前写的一个交互式shell库，实现了命令行客户端。筛选免费梯子的效率高过很多客户端。
+既然要使用github，也不能完全指望免费梯子，毕竟不太稳定。所以，gvc必须有一键修饰hosts文件，加速github访问的功能。另外，gvc还有github下载加速，只需要提供某个github项目的主页，即可选择加速下载源码或者最新的release了，无需代理或者找加速网站。
+
+此外，gvc还提供了代码统计(Count Lines of Code)， asciinema终端录制和上传，浏览器数据网盘同步等等功能。
+
+目前为止，**gvc可以说已经成为一个跨平台，多机器开发环境管理的脚手架工具**。
 
 ---------
-## What's supported?
+## gvc支持哪些语言或应用？
 
 <table>
   <thead>
     <tr>
-      <th>Lang/App</th>
-      <th>additions</th>
+      <th>语言/应用</th>
+      <th>备注</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><a href="https://go.dev/">go homepage</a></td>
-      <td><a href="https://golang.google.cn/">go homepage cn</a>|<a href="https://mirrors.aliyun.com/golang/">aliyun mirror</a></td>
+      <td><a href="https://go.dev/">go官网</a></td>
+      <td><a href="https://golang.google.cn/">go国内下载</a>|<a href="https://mirrors.aliyun.com/golang/">阿里镜像源</a></td>
     </tr>
     <tr>
-      <td><a href="https://www.oracle.com/java/technologies/downloads/">java/jdk homepage</a></td>
-      <td><a href="https://www.injdk.cn/">java/jdk cn</a></td>
+      <td><a href="https://www.oracle.com/java/technologies/downloads/">java/jdk</a></td>
+      <td><a href="https://www.injdk.cn/">java/jdk国内下载</a></td>
     </tr>
     <tr>
-      <td><a href="https://maven.apache.org/download.cgi">maven homepage</a></td>
-      <td><a href="https://dlcdn.apache.org/maven/">maven downloads</a></td>
+      <td><a href="https://maven.apache.org/download.cgi">maven官网</a></td>
+      <td><a href="https://dlcdn.apache.org/maven/">maven下载</a></td>
     </tr>
     <tr>
-      <td><a href="https://gradle.org/install/">gradle homepage</a></td>
-      <td><a href="https://gradle.org/releases/">gradle releases</a></td>
+      <td><a href="https://gradle.org/install/">gradle官网</a></td>
+      <td><a href="https://gradle.org/releases/">gradle下载</a></td>
     </tr>
     <tr>
-      <td><a href="https://www.python.org/downloads/">python homepage</a></td>
+      <td><a href="https://www.python.org/downloads/">python官网</a></td>
       <td><a href="https://github.com/pyenv/pyenv">pyenv</a>|<a href="https://github.com/pyenv-win/pyenv-win">pyenv-win</a></td>
     </tr>
     <tr>
-      <td><a href="https://nodejs.org/en/download">nodejs homepage</a></td>
-      <td><a href="https://nodejs.org/dist/index.json">nodejs versions</a></td>
+      <td><a href="https://nodejs.org/en/download">nodejs官网</a></td>
+      <td><a href="https://nodejs.org/dist/index.json">nodejs版本信息</a></td>
     </tr>
     <tr>
-      <td><a href="https://www.rust-lang.org/tools/install">rust homepage</a></td>
-      <td><a href="https://www.rust-lang.org/zh-CN/tools/install">rust homepage cn</a></td>
+      <td><a href="https://www.rust-lang.org/tools/install">rust官网</a></td>
+      <td><a href="https://www.rust-lang.org/zh-CN/tools/install">rust中文官网</a></td>
     </tr>
     <tr>
-      <td><a href="https://www.cygwin.com/">Cygwin homepage</a></td>
-      <td><a href="https://www.cygwin.com/install.html">Cygwin installation</a></td>
+      <td><a href="https://www.cygwin.com/">Cygwin官网</a></td>
+      <td><a href="https://www.cygwin.com/install.html">Cygwin安装</a></td>
     </tr>
     <tr>
-      <td><a href="https://www.msys2.org/">Msys2 homepage</a></td>
-      <td><a href="https://mirrors.tuna.tsinghua.edu.cn/help/msys2/">Msys2 tsinghua mirror</a></td>
+      <td><a href="https://www.msys2.org/">Msys2官网</a></td>
+      <td><a href="https://mirrors.tuna.tsinghua.edu.cn/help/msys2/">Msys2清华镜像源</a></td>
     </tr>
     <tr>
       <td><a href="https://github.com/microsoft/vcpkg-tool">vcpkg-tool</a></td>
       <td><a href="https://github.com/microsoft/vcpkg">vcpkg</a></td>
     </tr>
     <tr>
-      <td><a href="https://julialang.org/">julia homepage</a></td>
-      <td><a href="https://cn.julialang.org/">julia community cn</a></td>
+      <td><a href="https://julialang.org/">julia官网</a></td>
+      <td><a href="https://cn.julialang.org/">julia中文社区</a></td>
     </tr>
     <tr>
-      <td><a href="https://vlang.io/">vlang homepage</a></td>
+      <td><a href="https://vlang.io/">vlang官网</a></td>
       <td><a href="https://github.com/vlang/v">vlang github</a></td>
     </tr>
     <tr>
-      <td><a href="https://typst.app/docs/">typst homepage</a></td>
+      <td><a href="https://typst.app/docs/">typst官网</a></td>
       <td><a href="https://github.com/typst/">typst github</a></td>
     </tr>
     <tr>
-      <td><a href="https://flutter.dev/">flutter homepage</a></td>
-      <td><a href="https://mirrors.nju.edu.cn/flutter/flutter_infra_release/releases/">flutter nju mirror</a></td>
+      <td><a href="https://flutter.dev/">flutter官网</a></td>
+      <td><a href="https://mirrors.nju.edu.cn/flutter/flutter_infra_release/releases/">flutter南大镜像源</a></td>
     </tr>
     <tr>
-      <td><a href="https://code.visualstudio.com/download">vscode homepage</a></td>
-      <td><a href="https://blog.csdn.net/feinifi/article/details/127697851">vscode cdn acceleration</a></td>
+      <td><a href="https://code.visualstudio.com/download">vscode官网</a></td>
+      <td><a href="https://blog.csdn.net/feinifi/article/details/127697851">vscode国内CDN加速</a></td>
     </tr>
     <tr>
-      <td><a href="https://neovim.io/">NeoVim homepage</a></td>
+      <td><a href="https://neovim.io/">NeoVim官网</a></td>
       <td><a href="https://github.com/neovim">NeoVim github</a></td>
     </tr>
     <tr>
-      <td><a href="https://brew.sh/">Homebrew homepage</a></td>
-      <td><a href="https://gitee.com/moqsien/gvc/raw/master/homebrew.sh">Homebrew shell script</a></td>
+      <td><a href="https://brew.sh/">Homebrew官网</a></td>
+      <td><a href="https://gitee.com/moqsien/gvc/raw/master/homebrew.sh">Homebrew安装脚本</a></td>
     </tr>
     <tr>
-      <td><a href="https://github.com/moqsien/hackbrowser">Browser data management</a></td>
-      <td><a href="https://github.com/moonD4rk/HackBrowserData">Browser data management github</a></td>
+      <td><a href="https://github.com/moqsien/hackbrowser">浏览器数据管理</a></td>
+      <td><a href="https://github.com/moonD4rk/HackBrowserData">浏览器数据管理github</a></td>
     </tr>
     <tr>
-      <td><a href="https://github.com/moqsien/neobox">neobox vpns</a></td>
+      <td><a href="https://github.com/moqsien/neobox">neobox免费梯子</a></td>
       <td><a href="https://github.com/SagerNet/sing-box">sing-box</a>|<a href="https://github.com/XTLS/Xray-core">xray-core</a>|<a href="https://github.com/moqsien/wgcf">wgcf</a></td>
     </tr>
     <tr>
-      <td><a href="https://gitlab.com/ineo6/hosts/-/raw/master/next-hosts">github hosts file</a></td>
-      <td><a href="https://github.com/jianboy/github-host/raw/master/hosts">github hosts file</a></td>
+      <td><a href="https://gitlab.com/ineo6/hosts/-/raw/master/next-hosts">github hosts加速</a></td>
+      <td><a href="https://github.com/jianboy/github-host/raw/master/hosts">github hosts加速</a></td>
     </tr>
     <tr>
-      <td><a href="https://asciinema.org/">asciinema</a></td>
-      <td><a href="https://github.com/moqsien/asciinema">asciinema for full-platform</a></td>
+      <td><a href="https://asciinema.org/">asciinema终端录频</a></td>
+      <td><a href="https://github.com/moqsien/asciinema">全平台支持</a></td>
     </tr>
     <tr>
-      <td><a href="https://github.com/hhatto/gocloc">count lines of code(cloc)</a></td>
-      <td><a href="https://github.com/hhatto/gocloc">cloc</a></td>
+      <td><a href="https://github.com/hhatto/gocloc">项目代码统计功能</a></td>
+      <td><a href="https://github.com/hhatto/gocloc">支持各种语言</a></td>
     </tr>
     <tr>
       <td><a href="https://github.com/protocolbuffers/protobuf">protobuf</a></td>
@@ -162,34 +177,35 @@ Finally, GVC becomes something just like a **Scaffolding Tool for local developm
       <td><a href="https://docs.docker.com/desktop/install/mac-install/">docker-for-MacOS</a></td>
     </tr>
     <tr>
-      <td><a href="https://github.com/go-git/go-git">git command using a local proxy</a></td>
-      <td><a href="https://github.com/go-git/go-git">go-git</a></td>
+      <td><a href="https://github.com/go-git/go-git">可以使用本地代理的git命令</a></td>
+      <td><a href="https://github.com/go-git/go-git">go-git，比git配置全局命令更方便</a></td>
     </tr>
     <tr>
       <td><a href="https://openai.com/">openai</a></td>
       <td><a href="https://github.com/sashabaranov/go-openai">go-openai</a></td>
     </tr>
     <tr>
-      <td><a href="https://xinghuo.xfyun.cn/">Iflytek</a></td>
-      <td><a href="https://xinghuo.xfyun.cn/sparkapi">spark-api</a></td>
+      <td><a href="https://xinghuo.xfyun.cn/">讯飞星火</a></td>
+      <td><a href="https://xinghuo.xfyun.cn/sparkapi">讯飞星火</a></td>
     </tr>
   </tbody>
 </table>
 
-## Download & Install
-- Download the latest [release](https://github.com/moqsien/gvc/releases).
-- Unzip, double click the executable file, or run executable file in Terminal/PowerShell.
-- Open a new Terminal/PowerShell, then the command **g** is available. Help info will be displayed using **'g help'**.
+---------
+## 下载和安装
+- 在[release](https://github.com/moqsien/gvc/releases)中下载最新版;
+- 解压之后，双击可执行文件，或者在Terminal/PowerShell中执行该文件;
+- 在新的Termnial/PowerShell中可以使用g或者gvc命令了，例如：g help;
 
-- Or install by **go install**
+- 或者使用go install安装
 ```bash
 go install -tags "with_wireguard with_shadowsocksr with_utls with_gvisor with_grpc with_ech with_dhcp" github.com/moqsien/gvc@latest
 ```
 
 ---------
-## Main features
-GVC is a command-line tool, use "g help" or "gvc help", to see help info.
-
+## 功能概览
+安装成功之后，**打开一个新的终端或者PowerShell**，可以执行g help命令，就能看到gvc的帮助信息。
+例如，Windows下，在PowerShell中，就能得到类似于如下的信息：
 ```bash
 $moqsien> g help
 
@@ -210,7 +226,7 @@ COMMANDS:
    maven, mav, ma                                   Maven version management.
    gradle, gra, gr                                  Gradle version management.
    nodejs, node, no                                 NodeJS version management.
-   flutter, flu, fl                                 Flutter version management.
+   flutter, flu, fl                                 Flutter version management. // 无需安装Android Studio，轻松配置VSCode进行Flutter安卓开发。
    julia, jul, ju                                   Julia version management.
    rust, rustc, ru, r                               Rust installation.
    cpp                                              C/C++ management.
@@ -226,7 +242,7 @@ COMMANDS:
    homebrew, brew, hb                               Homebrew installation or update.
    gsudo, winsudo, gs, ws                           Gsudo for windows.
    hosts, h, host                                   Sytem hosts file management(need admistrator or root).
-   git-set-proxy, gsproxy, gsp                      Set default proxy for git [default: http://localhost:2023].
+   git-set-proxy, gsproxy, gsp                      Set default proxy for git [default: http://localhost:2023]. // 设置git-*子命令的默认代理
    git-clone, gclone, gclo                          Git Clone using a proxy.
    git-pull, gpull, gpul                            Git Pull using a proxy.
    git-push, gpush, gpus                            Git Push using a proxy.
@@ -253,6 +269,7 @@ GLOBAL OPTIONS:
 
 ```bash
 $moqsien> g version
+
       Name: GVC
       Version: v1.5.7(c7d768d9)
       UpdateAt: Tue Sep 26 13:14:49 2023 +0800
@@ -260,7 +277,7 @@ $moqsien> g version
       Email: moqsien2022@gmail.com
 ```
 
-### Subcommand: gpt
+### gpt子命令
 ```bash
 $moqsien> g gpt help
 
@@ -273,10 +290,9 @@ USAGE:
 OPTIONS:
    --help, -h  show help
 ```
+ChatGPT和讯飞星火大模型客户端。基于TUI。详细信息请查看[gogpt](https://github.com/moqsien/gogpt)。
 
-A TUI client for ChatGPT and Spark. For detail, see [gogpt](https://github.com/moqsien/gogpt).
-
-### Subcommand: go
+### go子命令
 ```bash
 $moqsien> g go help
 
@@ -302,10 +318,12 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-In this subcommand, you can show/install/remove/change go compiler versions, search third-party packages written in Go, and build Go source code for multi-platforms without prepare any scripts.
-You can also rename a local go module using subcommand: **g go rto NEW_MODULE_NAME**.
+go子命令可以安装、删除、切换版本。还能一键配置好诸如GOPATH、GOPROXY、GOBIN之类的环境变量。
+还能通过search-package来搜索第三方库。
+build子命令还提供了对于go build的增强，可以跨平台编译并压缩打包，无需编写任何脚本。
+renameTo子命令能重命名一个本地go项目。
 
-### Subcommand: proto
+### proto子命令
 ```bash
 $moqsien> g proto help
 
@@ -324,9 +342,9 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-In this subcommand, you can auto-install protoc, protoc-gen-go and protoc-gen-go-grpc.
+一键安装protoc, protoc-gen-go以及protoc-gen-go-grpc。
 
-### Subcommand: python
+### python子命令
 ```bash
 $moqsien> g python help
 
@@ -349,9 +367,10 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-This subcommand benifits a lot from pyenv/pyenv-win. 
+python多版本管理采用了现成的pyenv和pyenv-win脚本，对其输出做了优化，另外针对大陆下载慢的情况进行了改进。安装python时，会自动配置好pip的国内加速源。
+Windows11有时候经常在~/AppData/Local/Microsoft/WindowsApps中自动生成python.exe，干扰了pyenv-win的python的环境变量，这里使用rmfix提供一键删除。
 
-### Subcommand: java
+### java子命令
 ```bash
 $moqsien> g java help
 
@@ -372,9 +391,9 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-In this subcommand, the option "-z" if for users in China.
+大陆用户请使用-z参数，这将从国内资源下载jdk，支持的版本也比较全。否则只能从官网下载最新版。
 
-### Subcommand: cpp
+### cpp子命令
 ```bash
 $moqsien> g cpp help
 
@@ -394,10 +413,10 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-This subcommand is for Windows users. It will install Msys2 or Cygwin, just to your preference.
-You can also install the Cpp-package-manager [vcpkg](https://github.com/microsoft/vcpkg) maintained by Microsoft.
+主要用于windows下，安装Cygwin或者Msys2。会默认安装git之类的工具。
+另外vcpkg是微软开源的cpp包管理器，与python的pip类似。
 
-### Subcommand: vlang
+### vlang子命令
 ```bash
 $moqsien> g vlang help
 
@@ -416,9 +435,11 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-Vlang is a fantastic new language with high performance. This subcommand will install or update to the latest version of Vlang. You can also install [v-analyser](https://github.com/v-analyzer/v-analyzer), which brings vlang the code completion/IntelliSense/go to definition features for VSCode and other editors. If you have VSCode installed, this subcommand will automatically install related extensions and config the settings for you.
+vlang是一个性能强悍语法简单的新兴语言，此命令可以一键安装/更新到vlang的最新版。
+install-analyzer会下载安装vlang的语法解析器以及相应的VSCode插件，如果系统已经安装了VSCode的话。
+这样VSCode就可以有vlang的语法高亮和自动补全之类的功能了。
 
-### Subcommand: vscode
+### vscode子命令
 ```bash
 $moqsien> g vscode help
 
@@ -437,9 +458,11 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-This subcommand will install VSCode for you. You can also install extensions using the extension-info-files saved to WebDAV by GVC. An adapter for git tools in Msys2/Cygwin to VSCode usage is available in this subcommand. You can easily make use of the git tool from either Msys2 or Cygwin in VSCode.
+一键安装VSCode，支持国内CDN加速，解决中国大陆下载慢的问题。
+根据WebDAV中保存的VSCode插件信息，一键自动安装插件。
+Cygwin或者Msys2中的git不能直接被VSCode识别，通过use-msys2-cygwin-git命令可以一键解决此问题。
 
-### Subcommand: hosts
+### hosts子命令
 ```bash
 $moqsien> g hosts help
 
@@ -457,9 +480,9 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-This subcommand will automatically update the hosts file. Main purpose of this subcommand is to speedup visits to github, microsoft, steam, etc.
+一键更新hosts文件，加速github、microsoft、steam等的访问。
 
-### Subcommand: github
+### github子命令
 ```bash
 $moqsien> g github help
 
@@ -477,9 +500,11 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-This subcommand speedups github downloadings in China.
+github下载加速。只需要提供github项目主页连接即可。
+使用g github download -code "https://github.com/moqsien/gvc"会下载gvc的源码压缩文件。
+使用g github download "https://github.com/moqsien/gvc"会下载gvc的最新release。
 
-### Subcommand: git-XXX
+### git-XXX 子命令
 ```bash
 $moqsien> g help
 ...
@@ -493,10 +518,10 @@ git-del-tag-push, gdeltag, gdtag, gdt  Git delete a tag and push to remote using
 
 ```
 
-These subcommands will accelerate your git command by using a proxy.
-Note that, they will use "http://localhost:2023" provided by neobox if you haven't specified one.
+使用代理加速的git相关命令。还有诸如commit+push，tag+push等组合命令。
+如果不特别指定代理，则默认使用neobox提供的免费代理"http://localhost:2023"。组合命令还可以不使用代理，这样在一般情况下可以少敲一点命令。
 
-### Subcommand: browser
+### browser子命令
 ```bash
 $moqsien> g browser help
 
@@ -516,9 +541,9 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-This subcommand handles browser data, save data to WebDAV. 
+一键自动管理浏览器数据。支持多款基于chromium的浏览器以及firefox。可以将浏览器数据，例如书签、插件列表、本地账号密码(加密处理)上传的自己的WebDAV网盘。
 
-### Subcommand: asciinema
+### asciinema子命令
 ```bash
 $moqsien> g asciinema help
 
@@ -538,9 +563,9 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-This subcommand provides terminal recording features for both **Powershell** and **Unix-Like Shells**.
+asciinema.org终端录制功能。可以录制、播放。并支持授权之后进行上传。写文档的利器。
 
-### Subcommand: cloc
+### cloc子命令
 ```bash
 $moqsien> g cloc help
 
@@ -565,9 +590,10 @@ OPTIONS:
    --not-match-dir value, --nmatd value, --nmd value  Exclude dir name (regex).
    --help, -h                                         show help
 ```
-This subcommand provides CLOC(Count Lines of Code) features.
+代码统计功能。支持对单个文件或者某个项目进行统计。支持正则表达式排除文件或文件夹等等。
+例如通过cloc功能的统计，gvc自身代码以及其他独立出去的库的代码，总计已经将近19k。
 
-### Subcommand: config
+### config子命令
 ```bash
 $moqsien> g config help
 
@@ -587,11 +613,11 @@ COMMANDS:
 OPTIONS:
    --help, -h  show help
 ```
-The subcommand webdav will interactively direct you to configure your WebDAV Account info and secrets for encrytion of browser data.
-The subcommand push and pull will interact with remote WebDAV.
-The subcommand reset will reset gvc-config-files to default values.
+这是配置文件统一管理的子命令。
+webdav子命令用于配置自己的webdav信息，包括账户、密码、host以及用于加密本地浏览器数据的密码等等。
+pull和push分别用于拉取和推送这些需要保存的信息。
 
-### Subcommand: neobox-shell
+### neobox-shell子命令
 ```bash
 PS C:\Users\moqsien> g neobox-shell help
 NAME:
@@ -603,10 +629,9 @@ USAGE:
 OPTIONS:
    --help, -h  show help
 ```
-This subcommand will start the neobox-shell.
-[neobox](https://github.com/moqsien/neobox) provides some available free VPNs for user.
+免费梯子的交互式shell启动命令。
 
-#### Supported command in neobox-shell
+#### neobox-shell内部命令
 ```bash
 >>> help
 
@@ -637,27 +662,28 @@ Commands:
   sys-proxy      To enable or disable System Proxy.
   wireguard      Register wireguard account and update licenseKey to Warp+ [if a licenseKey is specified].
 ```
-Note: You should read the docs for neobox. For details, please see [neobox](https://github.com/moqsien/neobox).
+在交互式shell中，可以控制免费梯子的启停，筛选等等。
+注意，**一定要去neobox项目认真阅读文档**，否则你可能无法使用免费梯子。具体请查看[neobox](https://github.com/moqsien/neobox)。
 
 ---------
-## special statement
-gvc provides no paid services, so, users should make use of it within the limits permitted by law in his/her country.
+## 特别申明
+本项目不提供任何收费服务，请任何使用者自觉遵守本国法律法规。
 
 ---------
 ## Demo
-- gvc installation
+- gvc 安装
 [![asciicast](https://asciinema.org/a/597749.svg)](https://asciinema.org/a/597749)
 
-- go version management.
+- go自动安装和多版本管理.
 [![asciicast](https://asciinema.org/a/597750.svg)](https://asciinema.org/a/597750)
 
-- [neobox](https://github.com/moqsien/neobox) free vpns.
+- [neobox](https://github.com/moqsien/neobox)免费vpn.
 [![asciicast](https://asciinema.org/a/597753.svg)](https://asciinema.org/a/597753)
 
-- vscode installation, and vscode extensions installation
+- vscode安装/更新，以及vscode插件信息同步，自动根据同步的信息安装插件
 [![asciicast](https://asciinema.org/a/597755.svg)](https://asciinema.org/a/597755)
 
-## thanks to
+## 感谢
 ---------
 - [xray-core](https://github.com/XTLS/Xray-core)
 - [sing-box](https://github.com/SagerNet/sing-box)
@@ -680,10 +706,12 @@ gvc provides no paid services, so, users should make use of it within the limits
 - [PowerSession-rs](https://github.com/Watfaq/PowerSession-rs)
 - [conpty-go](https://github.com/qsocket/conpty-go)
 - [gocloc](https://github.com/hhatto/gocloc)
+- [protobuf](https://github.com/protocolbuffers/protobuf)
 - [docker](https://docs.docker.com/desktop/)
 - [go-git](https://github.com/go-git/go-git)
 - [gogpt](https://github.com/moqsien/gogpt)
 
-## buy me a coffee
+## 送我一杯咖啡~~~
 [wechat](https://github.com/moqsien/moqsien/blob/main/imgs/wechat.jpeg)
+
 [alipay](https://github.com/moqsien/moqsien/blob/main/imgs/alipay.jpeg)
